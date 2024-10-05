@@ -1,12 +1,12 @@
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { Image, StyleSheet, Platform, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>Home screen</Text>
-      <Link href='/(auth)/sign-in'>Get started</Link>
+      <Text style={styles.text}>Social Minds</Text>
+      <Link href='/sign-in'>Get started</Link>
     </SafeAreaView>
   );
 }
@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   text:{
-    color: '#000000'
+    color: '#000000',
+    fontSize: 30
   }
 });

@@ -5,7 +5,7 @@ import { Text } from 'react-native';
 export default function TabTwoScreen() {
   return (
     <View style={styles.container}>
-      <Text>Tab [Home|Settings]</Text>
+      <Text>Tab 1</Text>
     </View>
   );
 }

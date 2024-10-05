@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import FormField from '@/components/FormField'
 import { useState } from 'react'
 import CustomButton from '@/components/Button'
+import { router } from 'expo-router'
 
 import { Link } from 'expo-router'
 const SignIn = () => {
@@ -41,10 +42,16 @@ const SignIn = () => {
 
                 <CustomButton
                     title="Sign In"
-                    handlePress={() => Alert.alert("Sign In")}
+                    handlePress={() => router.push('/home')}
                     containerStyles={{marginTop: 20}}
                     isLoading={isSubmitting}
                 />
+
+                <View>
+                    <Text style={{color: '#fff', marginTop: 12}}>
+                        Don't have an account? <Link href="/sign-up">Sign Up</Link>
+                    </Text>
+                </View>
            </View>
         </ScrollView>
     </SafeAreaView>

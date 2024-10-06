@@ -10,6 +10,7 @@ export default function TabLayout() {
 
   return (
     <Tabs
+      
     >
       <Tabs.Screen
         name="home"
@@ -18,6 +19,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'home' : 'home'} color={color} />
           ),
+          headerShown: false,
         }}
       />
       <Tabs.Screen
@@ -29,6 +31,7 @@ export default function TabLayout() {
           ),
         }}
       />
+      
     </Tabs>
   );
 }

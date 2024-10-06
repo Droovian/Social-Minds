@@ -6,6 +6,7 @@ type CustomButtonProps = {
     containerStyles?: any;
     textStyles?: any;
     isLoading?: boolean;
+    className?: string;
 };
 const CustomButton = ({
   title,
@@ -20,7 +21,7 @@ const CustomButton = ({
       onPress={handlePress}
       activeOpacity={0.7}
       disabled={isLoading}
-      style={styles.buttonContainer}
+      className='bg-cyan-100 p-3 rounded-md'
     >
       <Text style={styles.buttonText}>
         {title}

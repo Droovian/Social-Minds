@@ -4,24 +4,58 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import FormField from '@/components/FormField'
 import { useState } from 'react'
 import CustomButton from '@/components/Button'
+import { z } from 'zod';
 import { router } from 'expo-router'
-
+import { signIn } from '@/lib/appwrite'
 import { Link } from 'expo-router'
+import { useGlobalContext } from '../context/app-provider'
+import { getCurrentUser } from '@/lib/appwrite'
+import UserCard from '@/components/UserCard'
+const SignInSchema = z.object({
+    email: z.string().email({ message: "Invalid email address" }),
+    password: z.string().min(6, { message: "Password must be at least 6 characters" }),
+});
+
 const SignIn = () => {
 
+    const [isSubmitting, setSubmitting] = useState<boolean>(false);
+    const { setUser, setIsLogged } = useGlobalContext()!;
     const [form, setForm] = useState({
         email: "",
         password: "",
     });
 
-    const [isSubmitting, setSubmitting] = useState<boolean>(false);
+    const handleSubmit = async () => {
+        
+        const validation = SignInSchema.safeParse(form);
+            
+            if (!validation.success) {
+                Alert.alert("Error", "Invalid form data");
+                return;
+            }
+            
+            setSubmitting(true);
+    
+            try {
+                await signIn(form.email, form.password);
+                const getUser = await getCurrentUser();
+                setUser(getUser);
+                setIsLogged(true);
+                Alert.alert("Success", "Signed in successfully");
+                router.replace('/home');
 
+            } catch (error) {
+                Alert.alert("Error", "Error signing in");
+            } finally {
+                setSubmitting(false);
+            }
+    }
+    
   return (
-    <SafeAreaView>
-        <ScrollView>
-            <View style={styles.container}>
-                <Text style={styles.textcol}>
-                        Sign In
+    <SafeAreaView className='bg-white h-full'>
+            <View className='w-full flex justify-center items-center h-full px-5 my-6'>
+                <Text className='mb-10 font-bold text-left text-2xl'>
+                        Welcome to Social Minds
                 </Text>
 
                 <FormField
@@ -29,7 +63,7 @@ const SignIn = () => {
                     value={form.email}
                     placeholder="Enter your email"
                     handleChangeText={(e) => {setForm({...form, email: e})}}
-                    otherStyles={{marginTop: 20}}
+                    otherStyles={''}
                 />
 
                 <FormField
@@ -42,18 +76,17 @@ const SignIn = () => {
 
                 <CustomButton
                     title="Sign In"
-                    handlePress={() => router.push('/home')}
+                    handlePress={handleSubmit}
                     containerStyles={{marginTop: 20}}
                     isLoading={isSubmitting}
                 />
 
                 <View>
-                    <Text style={{color: '#fff', marginTop: 12}}>
+                    <Text style={{ marginTop: 20, fontSize: 20}}>
                         Don't have an account? <Link href="/sign-up">Sign Up</Link>
                     </Text>
                 </View>
            </View>
-        </ScrollView>
     </SafeAreaView>
   )
 }
@@ -62,14 +95,13 @@ export default SignIn
 
 const styles = StyleSheet.create({
     container:{
-        flex: 1,
-        backgroundColor: '#000',
+        backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
         height: Dimensions.get('window').height - 100,
     },
     textcol: {
-        color: '#fff',
+        color: '#000000',
         fontSize: 30,
     }
 

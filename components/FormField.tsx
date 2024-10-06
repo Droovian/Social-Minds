@@ -15,10 +15,9 @@ const FormField = ({title, value, placeholder, handleChangeText, otherStyles, ..
 
     const [showPassword, setShowPassword] = useState(false);
   return (
-    <View>
-      <Text>FormField</Text>
-
-      <View style={styles.container}>
+    <View className='flex flex-col space-y-2'>
+        <Text className='text-gray-700 text-base font-medium'>{title}</Text>
+      <View className='w-72 mb-7 h-16 px-4 bg-black-100 rounded-2xl border-2 border-gray-300 focus:border-secondary flex flex-row items-center'>
 
         <TextInput
             value={value}
@@ -27,16 +26,19 @@ const FormField = ({title, value, placeholder, handleChangeText, otherStyles, ..
             placeholderTextColor="#7B7B8B"
             onChangeText={handleChangeText}
             secureTextEntry={title === 'Password' && !showPassword}
+            className={otherStyles}
             {...props}
         />
 
         {title === 'Password' && (
             
-            <TouchableOpacity onPress={() => setShowPassword(!showPassword)} >
+            <TouchableOpacity
+            className='relative left-10'
+            onPress={() => setShowPassword(!showPassword)} >
                 <Image
                     source={!showPassword ? icons.eye : icons.eyeSlash}
                     resizeMode='contain'
-                    style={styles.image}
+                    className='w-6 h-6'
                 />
             </TouchableOpacity>
         )}
@@ -51,9 +53,9 @@ export default FormField
 const styles = StyleSheet.create({
 
     input: {
-        color: '#fff',
+        color: '#000000',
         fontSize: 16,
-        padding: 10,
+        padding: 5,
     },
     container:{
         width: 200,
@@ -64,8 +66,4 @@ const styles = StyleSheet.create({
         gap: 10,
 
     },
-    image:{
-        height: 30,
-        width: 30,
-    }
 })

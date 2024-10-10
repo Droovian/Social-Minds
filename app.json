@@ -14,13 +14,15 @@
     },
     "ios": {
       "supportsTablet": true,
-      "package": "com.dhruv.socialminds"
+      "package": "com.dhruv.socialminds",
+      "bundleIdentifier": "com.anonymous.socialminds"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.anonymous.socialminds"
     },
     "web": {
       "bundler": "metro",

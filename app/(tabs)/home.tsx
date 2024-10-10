@@ -1,4 +1,5 @@
 import { ScrollView, StyleSheet, Text, View, Pressable, Alert } from 'react-native'
+import { Redirect } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React from 'react'
 import { router } from 'expo-router'
@@ -10,6 +11,7 @@ const Home = () => {
 
   const { user, setUser, isLogged, setIsLogged } = useGlobalContext()!;
 
+  if(!isLogged) return <Redirect href='/sign-in' />
   const handleLogout = async () => {
     try{
       await logout();

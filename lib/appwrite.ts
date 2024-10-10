@@ -1,4 +1,6 @@
-import { Client, Account, ID, Databases, Query, Storage, Avatars, Models, OAuthProvider } from 'react-native-appwrite';
+import { Client, Account, ID, Databases, Query, Storage, Avatars, Models, OAuthProvider, Messaging } from 'react-native-appwrite';
+import { send, EmailJSResponseStatus } from '@emailjs/react-native';
+import { init } from '@emailjs/react-native';
 
 export const appwriteConfig = {
     endpoint: 'https://cloud.appwrite.io/v1',
@@ -7,6 +9,12 @@ export const appwriteConfig = {
     projectId: process.env.EXPO_PUBLIC_PROJECT_ID || '',
     userCollectionId: process.env.EXPO_PUBLIC_USER_COLLECTION_ID || '',
 };
+
+const publicKey = '47t9QkVW0yv1DCmSX';
+
+init({
+    publicKey: publicKey,
+})
 
 const client = new Client();
 
@@ -29,11 +37,15 @@ export async function createUser(email: string, password: string, username: stri
             throw new Error("Failed to create account");
         }
 
-        // const verify = await account.createVerification('https://be11-36-255-232-90.ngrok-free.app/verify');
+        const verification = await account.createVerification('http://localhost:8081');
 
-        // if(!verify){
-        //     console.log("Failed to send verification email");
-        // }
+        if(!verification){
+            throw new Error("Failed to create verification");
+        }
+        const otp = generateOTP();
+        const otpExpiry = new Date(Date.now() + 5 * 60 * 1000);
+        const emailSent = await sendEmail(email, otp);
+        if(!emailSent){ throw new Error("Failed to send email"); }
 
         await signIn(email, password);
 
@@ -43,6 +55,8 @@ export async function createUser(email: string, password: string, username: stri
                 accountId: newUserAcc?.$id,
                 email: email,
                 username: username,
+                otp: otp,
+                otpExpiry: otpExpiry.toISOString(),
             }
         );
 
@@ -54,11 +68,54 @@ export async function createUser(email: string, password: string, username: stri
     }
 }
 
+export async function verifyOTP(email: string, enteredOTP: string) {
+    try {
+        const userDocuments = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            [Query.equal("email", email)]
+        );
+
+        if (userDocuments.total === 0) {
+            throw new Error("No user found with this email.");
+        }
+
+        const user = userDocuments.documents[0];
+        const currentTime = new Date();
+
+        // Check if the OTP has expired
+        if (currentTime > new Date(user.otpExpiry)) {
+            throw new Error("OTP has expired. Please request a new one.");
+        }
+
+        if (user.otp === enteredOTP) {
+            // OTP is correct; proceed with further actions, like confirming the account
+            console.log("OTP verified successfully!");
+
+            // Optionally, clear the OTP from the database after successful verification
+            await databases.updateDocument(
+                appwriteConfig.databaseId,
+                appwriteConfig.userCollectionId,
+                user.$id,
+                { otp: null, otpExpiry: null } // Clear the OTP and expiry
+            );
+
+            return { message: "OTP verified successfully!" };
+        } else {
+            throw new Error("Invalid OTP entered.");
+        }
+    } catch (error: any) {
+        console.error("Error verifying OTP:", error.message || error);
+        throw new Error("Error verifying OTP!");
+    }
+}
+
 export async function signIn(email: string, password: string) {
 
     try {
         const session = await account.createEmailPasswordSession(email, password);
         console.log(session);
+
         return session;
     }
     catch(error: any){
@@ -66,6 +123,28 @@ export async function signIn(email: string, password: string) {
     }
 }
 
+export function generateOTP() {
+    return Math.floor(100000 + Math.random() * 900000).toString(); 
+}
+
+export async function sendEmail(email: string, otp: string) {
+
+    try {
+
+        const templateParams = {
+            to_email: email,
+            otp: otp,
+        }
+        const response: EmailJSResponseStatus = await send('service_lco249x', 'template_juk4xeb', templateParams);
+
+        console.log('Email sent:', response);
+        return true;
+    }
+    catch(err){
+        console.error('Error sending email:', err);
+        return false;
+    }
+}
 export async function getCurrentUser() {
     try {
       const currentAccount = await getAccount();

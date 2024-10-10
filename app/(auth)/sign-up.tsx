@@ -9,6 +9,7 @@ import { z } from 'zod';
 import { Link } from 'expo-router'
 import { router } from 'expo-router'
 import { useGlobalContext } from '../context/app-provider'
+import { send, EmailJSResponseStatus } from '@emailjs/react-native'
 
 const SignUpSchema = z.object({
     username: z.string().min(3, { message: "Username must be at least 3 characters" }).max(20),
@@ -42,7 +43,7 @@ const SignUp = () => {
                 setUser(user);
                 setIsLogged(true);
 
-                router.replace('/home');
+                router.replace('/verify');
 
             } catch (error) {
                 Alert.alert("Error", "Error creating user");

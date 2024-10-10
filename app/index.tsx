@@ -2,7 +2,7 @@ import { Link, router, Redirect } from 'expo-router';
 import { Image, StyleSheet, Platform, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useGlobalContext } from './context/app-provider';
-
+// ios 776061966430-r0v900hul9sed6fs9q9a1in4vu5i070t.apps.googleusercontent.com
 export default function HomeScreen() {
 
   const { loading, isLogged } = useGlobalContext()!;

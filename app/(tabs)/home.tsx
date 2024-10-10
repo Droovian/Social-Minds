@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View, Pressable, Alert } from 'react-native'
+import { ScrollView, StyleSheet, Text, View, Pressable, Alert, Button } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React from 'react'
 import { router } from 'expo-router'
@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { useGlobalContext } from '../context/app-provider'
 import UserCard from '@/components/UserCard'
 import { logout } from '@/lib/appwrite'
+import Cards from '@/components/Cards'
 const Home = () => {
 
   const { user, setUser, isLogged, setIsLogged } = useGlobalContext()!;
@@ -32,8 +33,12 @@ const Home = () => {
             <Text style={styles.primaryText}>
               What would you like to proceed with?
             </Text>
+            
+            <Cards/>
+
         </ScrollView>
 
+        
     {
       isLogged && 
         <View style={styles.homeFooter}>
@@ -83,6 +88,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
     marginRight: 10
+  }, 
+    fixToText: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop:50
+  },
+  button1:{
+    color:"EB8317",
   }
+  
  
 })

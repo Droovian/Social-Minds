@@ -37,15 +37,10 @@ export async function createUser(email: string, password: string, username: stri
             throw new Error("Failed to create account");
         }
 
-        const verification = await account.createVerification('http://localhost:8081');
-
-        if(!verification){
-            throw new Error("Failed to create verification");
-        }
-        const otp = generateOTP();
-        const otpExpiry = new Date(Date.now() + 5 * 60 * 1000);
-        const emailSent = await sendEmail(email, otp);
-        if(!emailSent){ throw new Error("Failed to send email"); }
+        // const otp = generateOTP();
+        // const otpExpiry = new Date(Date.now() + 5 * 60 * 1000);
+        // const emailSent = await sendEmail(email, otp);
+        // if(!emailSent){ throw new Error("Failed to send email"); }
 
         await signIn(email, password);
 
@@ -55,8 +50,6 @@ export async function createUser(email: string, password: string, username: stri
                 accountId: newUserAcc?.$id,
                 email: email,
                 username: username,
-                otp: otp,
-                otpExpiry: otpExpiry.toISOString(),
             }
         );
 

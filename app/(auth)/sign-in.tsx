@@ -9,7 +9,6 @@ import { router } from 'expo-router'
 import { signIn } from '@/lib/appwrite'
 import { Link } from 'expo-router'
 import { useGlobalContext } from '../context/app-provider'
-import { loginWithGoogle } from '@/lib/appwrite'
 import { getCurrentUser } from '@/lib/appwrite'
 import UserCard from '@/components/UserCard'
 const SignInSchema = z.object({
@@ -78,13 +77,6 @@ const SignIn = () => {
                 <CustomButton
                     title="Sign In"
                     handlePress={handleSubmit}
-                    containerStyles={{marginTop: 20}}
-                    isLoading={isSubmitting}
-                />
-
-                <CustomButton
-                    title='Sign In with Google'
-                    handlePress={loginWithGoogle}
                     containerStyles={{marginTop: 20}}
                     isLoading={isSubmitting}
                 />

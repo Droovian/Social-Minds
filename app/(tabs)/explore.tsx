@@ -1,19 +1,14 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { StyleSheet, Image, Platform, View } from 'react-native';
 import { Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function TabTwoScreen() {
+export default function Explore() {
   return (
-    <View style={styles.container}>
-      <Text>Tab 1</Text>
-    </View>
+    <SafeAreaView className='flex-1 bg-white'>
+      <View className='p-5'>
+        <Text className='text-3xl font-bold text-center'>Join a community!</Text>
+      </View>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});

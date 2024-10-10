@@ -61,6 +61,33 @@ export async function createUser(email: string, password: string, username: stri
     }
 }
 
+export async function updateUserProfile(profileData: {
+    hasSelectedInterest?: boolean;
+    interests?: string[];
+  }) {
+    try {
+      const currentUser = await getCurrentUser();
+  
+      if (!currentUser) {
+        throw new Error("No user is currently logged in.");
+      }
+  
+      const userId = currentUser.$id; 
+  
+      const updatedUser = await databases.updateDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.userCollectionId,
+        userId,
+        profileData
+      );
+  
+      return updatedUser; 
+    } catch (error: any) {
+      console.error("Error updating user profile:", error.message || error);
+      throw new Error("Error updating user profile!");
+    }
+  }
+
 export async function verifyOTP(email: string, enteredOTP: string) {
     try {
         const userDocuments = await databases.listDocuments(

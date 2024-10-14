@@ -7,8 +7,6 @@ const Add = () => {
     <SafeAreaView className='flex-1 bg-white'>
       <View className='p-5'>
         <Text className='text-3xl font-bold text-center'>Add an Event</Text>
-
-        
       </View>
     </SafeAreaView>
   )

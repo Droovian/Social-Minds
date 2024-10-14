@@ -6,11 +6,15 @@ import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme()!;
 
   return (
     <Tabs
-      
+    // screenOptions={{
+    //   headerStyle: {
+    //     backgroundColor: '#ffffff',
+    //   },
+    // }}
     >
       <Tabs.Screen
         name="home"

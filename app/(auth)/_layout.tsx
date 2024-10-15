@@ -25,6 +25,12 @@ export default function Layout(){
                 }}
             />
             <Stack.Screen
+                name="welcome"
+                options={{
+                    headerShown: false
+                }}
+            />
+            <Stack.Screen
                 name="verify"
                 options={{
                     headerShown: false
